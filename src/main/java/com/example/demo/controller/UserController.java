@@ -10,7 +10,6 @@ import com.example.demo.service.UserService;
 
 import jakarta.validation.Valid;
 
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -58,10 +57,8 @@ public class UserController {
 
     @GetMapping("/edit")
     public String showEditForm(@RequestParam Long id, Model model) {
-        Optional<User> existingUser = userService.findById(id);
-        if (existingUser.isEmpty()){
-            return "redirect:/users";
-        }
+        User existingUser = userService.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         model.addAttribute("user", existingUser);
         return "edit-page";
     }
